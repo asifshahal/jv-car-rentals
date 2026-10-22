@@ -1,0 +1,153 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-sans: "Instrument Sans", system-ui, sans-serif;
+  --radius-sm: 2px;
+  --radius-md: 3px;
+  --radius-lg: var(--radius);
+  --radius-xl: 6px;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ink: var(--ink);
+  --color-ink-foreground: var(--ink-foreground);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-border: var(--ink-border);
+}
+
+:root {
+  --radius: 4px;
+  --background: oklch(0.975 0.008 85);
+  --foreground: oklch(0.2 0.008 70);
+  --card: oklch(0.99 0.005 85);
+  --card-foreground: oklch(0.2 0.008 70);
+  --popover: oklch(0.99 0.005 85);
+  --popover-foreground: oklch(0.2 0.008 70);
+  /* single accent: deep forest green */
+  --primary: oklch(0.36 0.06 158);
+  --primary-foreground: oklch(0.97 0.01 85);
+  --secondary: oklch(0.94 0.012 85);
+  --secondary-foreground: oklch(0.2 0.008 70);
+  --muted: oklch(0.94 0.012 85);
+  --muted-foreground: oklch(0.47 0.01 70);
+  --accent: oklch(0.93 0.02 150);
+  --accent-foreground: oklch(0.3 0.05 158);
+  --destructive: oklch(0.5 0.17 27);
+  --destructive-foreground: oklch(0.98 0 0);
+  --border: oklch(0.87 0.012 80);
+  --input: oklch(0.82 0.012 80);
+  --ring: oklch(0.36 0.06 158);
+  --ink: oklch(0.19 0.006 70);
+  --ink-foreground: oklch(0.95 0.01 85);
+  --ink-muted: oklch(0.72 0.01 80);
+  --ink-border: oklch(0.32 0.008 70);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+  }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+}
+
+@utility eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+@utility container-page {
+  width: 100%;
+  max-width: 76rem;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+  @media (min-width: 768px) {
+    padding-inline: 2rem;
+  }
+}
+
+@utility field {
+  width: 100%;
+  min-height: 3rem;
+  border: 1px solid var(--input);
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 0.65rem 0.85rem;
+  font-size: 1rem;
+  color: var(--foreground);
+}
+
+@utility btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 3rem;
+  padding: 0.75rem 1.4rem;
+  border-radius: var(--radius);
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
+  transition:
+    background-color 0.2s,
+    color 0.2s,
+    border-color 0.2s;
+}
+
+@utility btn-primary {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  &:hover {
+    background: color-mix(in oklab, var(--primary) 85%, black);
+  }
+}
+
+@utility btn-outline {
+  border: 1px solid currentColor;
+  &:hover {
+    background: color-mix(in oklab, currentColor 8%, transparent);
+  }
+}
