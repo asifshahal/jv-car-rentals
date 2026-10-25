@@ -22,9 +22,12 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESC },
       { property: "og:type", content: "website" },
+      { property: "og:image", content: "https://jvcarrental.in/seo-logo.png" },
+      { property: "og:image:alt", content: "JV Car Rental gold crest logo on a dark blue background" },
+      { name: "twitter:image", content: "https://jvcarrental.in/seo-logo.png" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
-    links: [{ rel: "canonical", href: business.siteUrl + "/" }],
+    links: [{ rel: "canonical", href: "https://jvcarrental.in/" }],
     scripts: [
       {
         type: "application/ld+json",
@@ -33,7 +36,8 @@ export const Route = createFileRoute("/")({
             "@context": "https://schema.org",
             "@type": "AutoRental",
             name: business.name,
-            url: business.siteUrl,
+            logo: "https://jvcarrental.in/seo-logo.png",
+            url: "https://jvcarrental.in/",
             telephone: business.whatsapp,
             areaServed: "Tiruchirappalli",
             address: {

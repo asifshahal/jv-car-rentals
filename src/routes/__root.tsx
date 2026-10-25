@@ -90,6 +90,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content: "Self drive and with-driver car rentals in Trichy, Tamil Nadu.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:image", content: "https://jvcarrental.in/seo-logo.png" },
+      { property: "og:image:alt", content: "JV Car Rental gold crest logo on a dark blue background" },
+      { name: "twitter:image", content: "https://jvcarrental.in/seo-logo.png" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [

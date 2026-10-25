@@ -43,7 +43,7 @@ export const business = {
   location: "Trichy, Tamil Nadu",
   fullAddress: "", // TODO admin: exact pickup address not finalised
   mapsUrl: "", // TODO admin: Google Maps link
-  siteUrl: "https://jvcarrentals.in", // TODO admin: update after domain is connected
+  siteUrl: "https://jvcarrental.in", // TODO admin: update after domain is connected
   hero: {
     heading: "Reliable Car Rentals in Trichy",
     description:
