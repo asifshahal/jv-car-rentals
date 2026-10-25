@@ -1,0 +1,32 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return signedIn()
+        && exists(/databases/$(database)/documents/jv_admins/$(request.auth.uid))
+        && get(/databases/$(database)/documents/jv_admins/$(request.auth.uid)).data.enabled == true;
+    }
+
+    match /jv_admins/{uid} {
+      allow get: if signedIn() && request.auth.uid == uid;
+      allow list, create, update, delete: if false;
+    }
+
+    match /jv_vehicles/{vehicleId} {
+      allow read: if true;
+      allow create, update: if isAdmin()
+        && request.resource.data.image is string
+        && request.resource.data.image.size() <= 450000;
+      allow delete: if isAdmin();
+    }
+
+    match /jv_settings/business_info {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+  }
+}

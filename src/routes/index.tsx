@@ -1,12 +1,13 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Check, MapPin, Minus } from "lucide-react";
+import { Check, MapPin, Minus, Shield } from "lucide-react";
 import heroImg from "@/assets/hero.jpg";
 import weddingImg from "@/assets/wedding.jpg";
 import birthdayImg from "@/assets/birthday.jpg";
 import { Header, Logo } from "@/components/site/Header";
 import { BookingForm } from "@/components/site/BookingForm";
 import { business, activeVehicles, faqs, rentalRules, type RentalType } from "@/config/business";
+import { useFleet, useBusiness, useDynamicRentalRules, useDynamicFaqs } from "@/hooks/useFleetData";
 import { inr, waLink } from "@/lib/booking";
 
 const TITLE = "Car Rental in Trichy — Self Drive & With Driver | JV Car Rentals";
@@ -79,8 +80,11 @@ function SectionHead({ eyebrow, title, sub }: { eyebrow: string; title: string; 
 function Index() {
   const [vehicleId, setVehicleId] = useState("");
   const [type, setType] = useState<RentalType | "">("");
-  const vs = activeVehicles();
+  const { activeVehicles: vs, vehicles: allVehicles } = useFleet();
+  const { business } = useBusiness();
   const r = business.rules;
+  const rules = useDynamicRentalRules();
+  const dynamicFaqs = useDynamicFaqs();
 
   const chooseCar = (id: string, t?: RentalType) => {
     setVehicleId(id);
@@ -88,7 +92,23 @@ function Index() {
     document.getElementById("book")?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const ertiga = vs[0]!;
+  const featuredCar = vs[0] || allVehicles[0] || {
+    id: "car",
+    name: "Suzuki Ertiga",
+    slug: "suzuki-ertiga",
+    seats: 7,
+    dailyPrice: 3199,
+    includedKmPerDay: 300,
+    extraKmPrice: 10,
+    selfDrive: true,
+    withDriver: true,
+    driverFeePerDay: 1000,
+    available: true,
+    description: "Seven seats for family trips, temple visits and group travel.",
+    image: "",
+    imageAlt: "Suzuki Ertiga",
+    order: 1,
+  };
 
   return (
     <div id="top" className="pb-20 lg:pb-0">
@@ -379,7 +399,7 @@ function Index() {
           <div>
             <SectionHead eyebrow="Before you book" title="Rental Rules" />
             <ul className="divide-y border-y">
-              {rentalRules().map((x) => (
+              {rules.map((x) => (
                 <li key={x} className="flex gap-3 py-3.5">
                   <Check className="size-4 mt-1 shrink-0 text-primary" />
                   {x}
@@ -390,20 +410,20 @@ function Index() {
           <aside className="self-start border bg-card p-7" aria-labelledby="ex-h">
             <p className="eyebrow text-muted-foreground">Pricing example</p>
             <h3 id="ex-h" className="mt-3 text-2xl">
-              {ertiga.name} — 2 Days
+              {featuredCar.name} — 2 Days
             </h3>
             <dl className="mt-5 space-y-3 text-sm">
               <div className="flex justify-between">
-                <dt>{inr(ertiga.dailyPrice)} × 2 days</dt>
-                <dd className="font-semibold">{inr(ertiga.dailyPrice * 2)}</dd>
+                <dt>{inr(featuredCar.dailyPrice)} × 2 days</dt>
+                <dd className="font-semibold">{inr(featuredCar.dailyPrice * 2)}</dd>
               </div>
               <div className="flex justify-between">
                 <dt>Included distance</dt>
-                <dd className="font-semibold">{ertiga.includedKmPerDay * 2} km</dd>
+                <dd className="font-semibold">{featuredCar.includedKmPerDay * 2} km</dd>
               </div>
               <div className="flex justify-between">
                 <dt>Additional km</dt>
-                <dd className="font-semibold">{inr(ertiga.extraKmPrice)}/km</dd>
+                <dd className="font-semibold">{inr(featuredCar.extraKmPrice)}/km</dd>
               </div>
               <div className="flex justify-between">
                 <dt>Fuel</dt>
@@ -412,7 +432,7 @@ function Index() {
               <div className="flex justify-between border-t pt-3 text-base">
                 <dt>Estimated rental</dt>
                 <dd className="font-display text-2xl font-semibold">
-                  {inr(ertiga.dailyPrice * 2)}
+                  {inr(featuredCar.dailyPrice * 2)}
                 </dd>
               </div>
             </dl>
@@ -427,7 +447,7 @@ function Index() {
           <div className="container-page grid gap-10 lg:grid-cols-[1fr_2fr]">
             <SectionHead eyebrow="FAQ" title="Common Questions" />
             <div className="divide-y border-y">
-              {faqs().map((f) => (
+              {dynamicFaqs.map((f) => (
                 <details key={f.q} className="group py-5">
                   <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-display text-xl font-semibold">
                     {f.q}
@@ -510,6 +530,15 @@ function Index() {
                   </a>
                 </li>
               ))}
+              <li>
+                <Link
+                  to="/admin"
+                  className="inline-flex items-center gap-1.5 text-primary hover:text-ink-foreground font-medium pt-1"
+                >
+                  <Shield className="size-3.5" />
+                  Admin Dashboard
+                </Link>
+              </li>
             </ul>
           </div>
           <div>

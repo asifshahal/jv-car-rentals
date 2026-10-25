@@ -97,10 +97,49 @@ export const vehicles: Vehicle[] = [
   },
 ];
 
-export const activeVehicles = () => [...vehicles].sort((a, b) => a.order - b.order);
+export const getBusinessConfig = () => {
+  if (typeof window !== "undefined") {
+    try {
+      const raw = localStorage.getItem("jv_rentals_business_data");
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && typeof parsed === "object") {
+          return {
+            ...business,
+            ...parsed,
+            hero: { ...business.hero, ...(parsed.hero || {}) },
+            rules: { ...business.rules, ...(parsed.rules || {}) },
+          };
+        }
+      }
+    } catch {
+      // Fall through to default
+    }
+  }
+  return business;
+};
+
+export const activeVehicles = (): Vehicle[] => {
+  if (typeof window !== "undefined") {
+    try {
+      const raw = localStorage.getItem("jv_rentals_fleet_data");
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed
+            .filter((v: Vehicle) => v.available !== false)
+            .sort((a: Vehicle, b: Vehicle) => a.order - b.order);
+        }
+      }
+    } catch {
+      // Fall through to default
+    }
+  }
+  return [...vehicles].filter((v) => v.available !== false).sort((a, b) => a.order - b.order);
+};
 
 export const rentalRules = (): string[] => {
-  const r = business.rules;
+  const r = getBusinessConfig().rules;
   return [
     `Minimum rental period: ${r.minDays} day`,
     `Each rental day is ${r.hoursPerDay} hours`,
@@ -120,11 +159,14 @@ export const rentalRules = (): string[] => {
 
 export const faqs = (): FaqItem[] => {
   const vs = activeVehicles();
-  const r = business.rules;
+  const r = getBusinessConfig().rules;
   return [
     {
       q: "How much does it cost to rent a car?",
-      a: vs.map((v) => `${v.name}: ₹${v.dailyPrice.toLocaleString("en-IN")}/day`).join(" · "),
+      a:
+        vs.length > 0
+          ? vs.map((v) => `${v.name}: ₹${v.dailyPrice.toLocaleString("en-IN")}/day`).join(" · ")
+          : "Contact us on WhatsApp for custom rates.",
     },
     { q: "How many kilometres are included?", a: `${r.includedKmPerDay} km per rental day.` },
     {

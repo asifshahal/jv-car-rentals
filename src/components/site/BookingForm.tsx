@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import { business, activeVehicles, type RentalType } from "@/config/business";
+import type { RentalType } from "@/config/business";
+import { useFleet, useBusiness } from "@/hooks/useFleetData";
 import { buildMessage, estimate, inr, rentalDays, validate, waLink } from "@/lib/booking";
 
 interface Props {
@@ -18,7 +19,8 @@ function Err({ id, msg }: { id: string; msg?: string }) {
 }
 
 export function BookingForm({ vehicleId, onVehicleChange, rentalType, onTypeChange }: Props) {
-  const vs = activeVehicles();
+  const { activeVehicles: vs } = useFleet();
+  const { business } = useBusiness();
   const [pickup, setPickup] = useState("");
   const [ret, setRet] = useState("");
   const [name, setName] = useState("");

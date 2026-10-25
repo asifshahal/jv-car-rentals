@@ -8,7 +8,7 @@ Official web platform for **JV Car Rentals** — premium self-drive and chauffeu
 - **WhatsApp Direct Booking**: Instant quote calculation and pre-filled WhatsApp booking links for fast customer communication.
 - **Rental Options**: Supports both Self Drive and With Driver rental modes.
 - **Responsive & Accessible**: Mobile-first design, fast SSR performance via TanStack Start, and modern typography.
-- **Centralized Business Configuration**: Editable fleet details, pricing, rental rules, FAQs, and contact info in `src/config/business.ts`.
+- **Owner-editable business data**: Fleet, prices, rental rules, FAQs, and contact details are managed in the secure admin panel and stored in Firebase Firestore. Vehicle photos are compressed and stored with fleet records in Firestore. Local defaults remain in `src/config/business.ts`.
 
 ## Tech Stack
 
@@ -17,6 +17,10 @@ Official web platform for **JV Car Rentals** — premium self-drive and chauffeu
 - **Routing**: [TanStack Router](https://tanstack.com/router)
 - **Icons**: [Lucide React](https://lucide.dev)
 - **Testing**: [Vitest](https://vitest.dev)
+
+## Admin setup
+
+See [FIREBASE_SETUP.md](./FIREBASE_SETUP.md) for Firebase Authentication, Firestore, security rules, and Vercel environment setup. The admin panel is available at `/admin` after Firebase is configured and an owner admin record is created.
 
 ## Getting Started
 
