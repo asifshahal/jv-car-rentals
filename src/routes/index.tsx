@@ -10,7 +10,7 @@ import { business, activeVehicles, faqs, rentalRules, type RentalType } from "@/
 import { useFleet, useBusiness, useDynamicRentalRules, useDynamicFaqs } from "@/hooks/useFleetData";
 import { inr, waLink } from "@/lib/booking";
 
-const TITLE = "Car Rental in Trichy — Self Drive & With Driver | JV Car Rentals";
+const TITLE = "JV Car Rental | Car Rental in Trichy - Self Drive & With Driver";
 const DESC =
   "Looking for car rental in Trichy? Choose from hatchbacks, sedans, SUVs and 7-seater family cars, with self-drive or driver options. Enquire on WhatsApp.";
 
@@ -20,6 +20,7 @@ export const Route = createFileRoute("/")({
       { title: TITLE },
       { name: "description", content: DESC },
       { property: "og:title", content: TITLE },
+      { property: "og:site_name", content: "JV Car Rental" },
       { property: "og:description", content: DESC },
       { property: "og:type", content: "website" },
       { property: "og:image", content: "https://jvcarrental.in/seo-logo.png" },
@@ -52,6 +53,13 @@ export const Route = createFileRoute("/")({
               priceCurrency: "INR",
               itemOffered: { "@type": "Car", name: v.name, seatingCapacity: v.seats },
             })),
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            name: "JV Car Rental",
+            alternateName: "JV Car Rentals",
+            url: "https://jvcarrental.in/",
           },
           {
             "@context": "https://schema.org",
@@ -508,12 +516,6 @@ function Index() {
         </p>
       </footer>
 
-      {/* Mobile sticky CTA */}
-      <div className="fixed inset-x-0 bottom-0 z-30 border-t bg-background/95 backdrop-blur p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] lg:hidden">
-        <a href="#book" className="btn btn-primary w-full">
-          Book / Enquire on WhatsApp
-        </a>
-      </div>
     </div>
   );
 }

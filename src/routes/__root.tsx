@@ -79,12 +79,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "JV Car Rentals — Car Rental in Trichy" },
+      { title: "JV Car Rental | Car Rental in Trichy - Self Drive & With Driver" },
       {
         name: "description",
         content: "Car rental in Trichy with hatchbacks, sedans, SUVs and 7-seater family cars. Choose self-drive or with-driver rentals and enquire on WhatsApp.",
       },
-      { property: "og:title", content: "JV Car Rentals — Car Rental in Trichy" },
+      { property: "og:title", content: "JV Car Rental | Car Rental in Trichy - Self Drive & With Driver" },
+      { property: "og:site_name", content: "JV Car Rental" },
       {
         property: "og:description",
         content: "Car rental in Trichy with hatchbacks, sedans, SUVs and 7-seater family cars. Choose self-drive or with-driver rentals and enquire on WhatsApp.",
