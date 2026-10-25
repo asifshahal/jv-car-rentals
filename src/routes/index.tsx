@@ -80,7 +80,7 @@ function SectionHead({ eyebrow, title, sub }: { eyebrow: string; title: string; 
 function Index() {
   const [vehicleId, setVehicleId] = useState("");
   const [type, setType] = useState<RentalType | "">("");
-  const { activeVehicles: vs, vehicles: allVehicles } = useFleet();
+  const { activeVehicles: vs } = useFleet();
   const { business } = useBusiness();
   const r = business.rules;
   const rules = useDynamicRentalRules();
@@ -90,24 +90,6 @@ function Index() {
     setVehicleId(id);
     if (t) setType(t);
     document.getElementById("book")?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  const featuredCar = vs[0] || allVehicles[0] || {
-    id: "car",
-    name: "Suzuki Ertiga",
-    slug: "suzuki-ertiga",
-    seats: 7,
-    dailyPrice: 3199,
-    includedKmPerDay: 300,
-    extraKmPrice: 10,
-    selfDrive: true,
-    withDriver: true,
-    driverFeePerDay: 1000,
-    available: true,
-    description: "Seven seats for family trips, temple visits and group travel.",
-    image: "",
-    imageAlt: "Suzuki Ertiga",
-    order: 1,
   };
 
   return (
@@ -233,7 +215,7 @@ function Index() {
                     ) : (
                       <Minus className="size-4" />
                     )}
-                    With Driver · {inr(v.driverFeePerDay)}/day
+                    With Driver — {v.withDriver ? "Available" : "Not available"}
                   </li>
                   <li className="text-muted-foreground">Fuel excluded</li>
                 </ul>
@@ -296,14 +278,14 @@ function Index() {
                 </p>
                 <ul className="mt-6 space-y-2 text-sm">
                   {[
-                    "Driver available with the rental",
-                    `${inr(r.driverFeePerDay)}/day driver charge`,
-                    "Fuel excluded",
-                    r.driverTerms,
-                  ].map((x) => (
-                    <li key={x} className="flex gap-2 border-b border-ink-border pb-2">
+                    "A driver travels with you",
+                    "No need to drive yourself",
+                    "A convenient option for longer trips and functions",
+                    "Availability and charges confirmed on WhatsApp",
+                  ].map((feature) => (
+                    <li key={feature} className="flex gap-2 border-b border-ink-border pb-2">
                       <Check className="size-4 mt-0.5 shrink-0" />
-                      {x}
+                      {feature}
                     </li>
                   ))}
                 </ul>
@@ -391,11 +373,8 @@ function Index() {
           </div>
         </section>
 
-        {/* Rules + example */}
-        <section
-          id="rules"
-          className="container-page py-20 md:py-28 grid gap-14 lg:grid-cols-[1.4fr_1fr]"
-        >
+        {/* Rental rules */}
+        <section id="rules" className="container-page py-20 md:py-28">
           <div>
             <SectionHead eyebrow="Before you book" title="Rental Rules" />
             <ul className="divide-y border-y">
@@ -407,39 +386,6 @@ function Index() {
               ))}
             </ul>
           </div>
-          <aside className="self-start border bg-card p-7" aria-labelledby="ex-h">
-            <p className="eyebrow text-muted-foreground">Pricing example</p>
-            <h3 id="ex-h" className="mt-3 text-2xl">
-              {featuredCar.name} — 2 Days
-            </h3>
-            <dl className="mt-5 space-y-3 text-sm">
-              <div className="flex justify-between">
-                <dt>{inr(featuredCar.dailyPrice)} × 2 days</dt>
-                <dd className="font-semibold">{inr(featuredCar.dailyPrice * 2)}</dd>
-              </div>
-              <div className="flex justify-between">
-                <dt>Included distance</dt>
-                <dd className="font-semibold">{featuredCar.includedKmPerDay * 2} km</dd>
-              </div>
-              <div className="flex justify-between">
-                <dt>Additional km</dt>
-                <dd className="font-semibold">{inr(featuredCar.extraKmPrice)}/km</dd>
-              </div>
-              <div className="flex justify-between">
-                <dt>Fuel</dt>
-                <dd className="font-semibold">Excluded</dd>
-              </div>
-              <div className="flex justify-between border-t pt-3 text-base">
-                <dt>Estimated rental</dt>
-                <dd className="font-display text-2xl font-semibold">
-                  {inr(featuredCar.dailyPrice * 2)}
-                </dd>
-              </div>
-            </dl>
-            <p className="mt-5 text-xs text-muted-foreground">
-              This is an example only, not a booking confirmation.
-            </p>
-          </aside>
         </section>
 
         {/* FAQ */}

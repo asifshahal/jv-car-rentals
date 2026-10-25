@@ -10,10 +10,9 @@ export function rentalDays(pickup: string, ret: string): number | null {
   return Math.max(1, Math.round((b - a) / 86400000));
 }
 
-export function estimate(v: Vehicle, type: RentalType, days: number) {
+export function estimate(v: Vehicle, days: number) {
   const base = v.dailyPrice * days;
-  const driver = type === "driver" ? v.driverFeePerDay * days : 0;
-  return { base, driver, total: base + driver, includedKm: v.includedKmPerDay * days };
+  return { base, total: base, includedKm: v.includedKmPerDay * days };
 }
 
 export function waNumber(raw: string) {
@@ -67,7 +66,7 @@ export function buildMessage(
   businessName: string,
 ) {
   const days = rentalDays(i.pickup, i.ret)!;
-  const est = estimate(i.vehicle, i.type, days);
+  const est = estimate(i.vehicle, days);
   const lines = [
     `Hello ${businessName},`,
     "",
@@ -81,16 +80,11 @@ export function buildMessage(
     `Pickup/Delivery: ${i.delivery ? `Delivery requested — ${i.deliveryLocation.trim()}` : "Pickup from rental location"}`,
     "",
   ];
-  if (i.type === "driver") {
-    lines.push(`Base Rental: ${inr(est.base)}`, `Driver: ${inr(est.driver)}`);
+  if (i.type === "self") {
+    lines.push(`Estimated Rental: ${inr(est.total)}`, `${est.includedKm} km included`, "Fuel: Excluded");
+  } else {
+    lines.push("Please confirm driver availability and charges before booking.");
   }
-  lines.push(
-    `Estimated Rental: ${inr(est.total)}`,
-    "Fuel: Excluded",
-    "",
-    "Please confirm availability and the final rental charges.",
-    "",
-    "Thank you.",
-  );
+  lines.push("", "Please confirm availability and the final rental charges.", "", "Thank you.");
   return lines.join("\n");
 }

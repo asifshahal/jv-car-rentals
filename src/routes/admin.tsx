@@ -706,7 +706,7 @@ function AdminPage() {
                             {car.withDriver ? (
                               <>
                                 <Check className="size-3.5 text-emerald-600" />
-                                <span>+{inr(car.driverFeePerDay)}</span>
+                                <span>{car.withDriver ? "Available" : "Not available"}</span>
                               </>
                             ) : (
                               <Minus className="size-3.5 text-muted-foreground" />
@@ -948,7 +948,6 @@ function CarEditorModal({
   const [extraKmPrice, setExtraKmPrice] = useState(String(car?.extraKmPrice ?? 10));
   const [selfDrive, setSelfDrive] = useState(car?.selfDrive ?? true);
   const [withDriver, setWithDriver] = useState(car?.withDriver ?? true);
-  const [driverFeePerDay, setDriverFeePerDay] = useState(String(car?.driverFeePerDay ?? 1000));
   const [available, setAvailable] = useState(car?.available ?? true);
   const [description, setDescription] = useState(car?.description || "");
   const [image, setImage] = useState(car?.image || ertigaImg);
@@ -1001,7 +1000,7 @@ function CarEditorModal({
       toast.error("Please enter a URL slug");
       return;
     }
-    if (![dailyPrice, extraKmPrice, driverFeePerDay].every((value) => /^\d+$/.test(value))) {
+    if (![dailyPrice, extraKmPrice].every((value) => /^\d+$/.test(value))) {
       toast.error("Enter a whole number for each price.");
       return;
     }
@@ -1017,7 +1016,6 @@ function CarEditorModal({
       extraKmPrice: Number(extraKmPrice),
       selfDrive: Boolean(selfDrive),
       withDriver: Boolean(withDriver),
-      driverFeePerDay: Number(driverFeePerDay),
       available: Boolean(available),
       description: description.trim(),
       image: image.startsWith("data:") ? "" : image || ertigaImg,
@@ -1199,8 +1197,8 @@ function CarEditorModal({
                   className="size-4 rounded text-primary"
                 />
                 <div>
-                  <span className="block text-xs font-semibold">With Driver Option</span>
-                  <span className="text-[11px] text-muted-foreground">Chauffeur service</span>
+                  <span className="block text-xs font-semibold">With Driver Available</span>
+                  <span className="text-[11px] text-muted-foreground">Let customers know if this option is available</span>
                 </div>
               </label>
 
@@ -1218,24 +1216,6 @@ function CarEditorModal({
               </label>
             </div>
 
-            {withDriver && (
-              <div className="mt-3 max-w-xs">
-                <label className="block text-xs font-medium">Driver Fee per Day (₹)</label>
-                <div className="relative mt-1">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground font-semibold">
-                    ₹
-                  </span>
-                  <input
-                    type="text"
-                    inputMode="numeric"
-                    pattern="[0-9]*"
-                    value={driverFeePerDay}
-                    onChange={(e) => setDriverFeePerDay(e.target.value.replace(/\D/g, ""))}
-                    className="field !pl-8 text-sm"
-                  />
-                </div>
-              </div>
-            )}
           </div>
 
           {/* Section: Vehicle Image & Presets */}
@@ -1618,7 +1598,6 @@ function RentalRulesForm({
   const [hoursPerDay, setHoursPerDay] = useState(currentRules.hoursPerDay ?? 24);
   const [includedKmPerDay, setIncludedKmPerDay] = useState(currentRules.includedKmPerDay ?? 300);
   const [minSelfDriveAge, setMinSelfDriveAge] = useState(currentRules.minSelfDriveAge ?? 20);
-  const [driverFeePerDay, setDriverFeePerDay] = useState(String(currentRules.driverFeePerDay ?? 1000));
   const [documents, setDocuments] = useState(
     currentRules.documents || "Required documents and security requirements apply and will be shared on WhatsApp.",
   );
@@ -1631,10 +1610,6 @@ function RentalRulesForm({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!/^\d+$/.test(driverFeePerDay)) {
-      toast.error("Enter a whole number for the driver fee.");
-      return;
-    }
     setIsSaving(true);
     const result = await onSave({
       rules: {
@@ -1643,7 +1618,6 @@ function RentalRulesForm({
         hoursPerDay: Number(hoursPerDay),
         includedKmPerDay: Number(includedKmPerDay),
         minSelfDriveAge: Number(minSelfDriveAge),
-        driverFeePerDay: Number(driverFeePerDay),
         documents: documents.trim(),
         delivery: delivery.trim(),
       },
@@ -1714,18 +1688,6 @@ function RentalRulesForm({
           />
         </div>
 
-        <div>
-          <label className="block text-xs font-medium">Standard Driver Fee (₹/day)</label>
-          <input
-            type="text"
-            inputMode="numeric"
-            pattern="[0-9]*"
-            value={driverFeePerDay}
-            onChange={(e) => setDriverFeePerDay(e.target.value.replace(/\D/g, ""))}
-            className="field mt-1 text-sm"
-            required
-          />
-        </div>
       </div>
 
       <div className="space-y-4 border-t pt-4">

@@ -33,7 +33,7 @@ export function BookingForm({ vehicleId, onVehicleChange, rentalType, onTypeChan
   const vehicle = vs.find((v) => v.id === vehicleId);
   const days = pickup && ret ? rentalDays(pickup, ret) : null;
   const est = useMemo(
-    () => (vehicle && rentalType && days ? estimate(vehicle, rentalType, days) : null),
+    () => (vehicle && rentalType === "self" && days ? estimate(vehicle, days) : null),
     [vehicle, rentalType, days],
   );
 
@@ -110,10 +110,13 @@ export function BookingForm({ vehicleId, onVehicleChange, rentalType, onTypeChan
                 name="type"
                 value={v}
                 checked={rentalType === v}
+                disabled={v === "driver" && Boolean(vehicle && !vehicle.withDriver)}
                 onChange={() => onTypeChange(v)}
                 className="accent-primary"
               />
-              <span className="text-sm font-medium">{l}</span>
+              <span className="text-sm font-medium">
+                {l}{v === "driver" && vehicle ? ` — ${vehicle.withDriver ? "Available" : "Not available"}` : ""}
+              </span>
             </label>
           ))}
         </div>
@@ -213,16 +216,22 @@ export function BookingForm({ vehicleId, onVehicleChange, rentalType, onTypeChan
 
       <div className="md:col-span-2 lg:col-span-3 flex flex-col gap-4 border-t pt-5 md:flex-row md:items-center md:justify-between">
         <div aria-live="polite">
-          {est && days ? (
+          {rentalType === "driver" ? (
+            <>
+              <p className="eyebrow text-muted-foreground">
+                With driver{days ? ` · ${days} day${days > 1 ? "s" : ""}` : ""}
+              </p>
+              <p className="text-sm text-muted-foreground">
+                Availability and charges will be confirmed with you on WhatsApp.
+              </p>
+            </>
+          ) : est && days ? (
             <>
               <p className="eyebrow text-muted-foreground">
                 Estimated rental · {days} day{days > 1 ? "s" : ""}
               </p>
               <p className="font-display text-3xl font-semibold">{inr(est.total)}</p>
-              <p className="text-sm text-muted-foreground">
-                {rentalType === "driver" && `Car ${inr(est.base)} + driver ${inr(est.driver)} · `}
-                {est.includedKm} km included · fuel excluded
-              </p>
+              <p className="text-sm text-muted-foreground">{est.includedKm} km included · fuel excluded</p>
             </>
           ) : (
             <p className="text-sm text-muted-foreground">

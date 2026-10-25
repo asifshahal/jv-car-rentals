@@ -147,7 +147,7 @@ export function useDynamicFaqs(): FaqItem[] {
     },
     {
       q: "Can I rent a car with a driver?",
-      a: `Yes. A driver can be arranged for ₹${r.driverFeePerDay.toLocaleString("en-IN")}/day.`,
+      a: "With-driver service availability depends on the vehicle. Contact us to confirm availability and charges.",
     },
     {
       q: "How do I book?",

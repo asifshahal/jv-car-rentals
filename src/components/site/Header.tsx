@@ -123,22 +123,23 @@ export function Header() {
       )}
       <div className="contact-marquee border-t border-border/70" role="region" aria-label={`Call ${business.phone} or WhatsApp ${business.whatsapp}`}>
         <div className="contact-marquee-track">
-          <div className="contact-marquee-group">
-            {contactItems.map((item) => (
-              <a className="contact-marquee-item" href={item.href} key={item.label}>
-                {item.icon}<span className="font-semibold uppercase tracking-[0.12em]">{item.label}</span><span>{item.value}</span>
-              </a>
-            ))}
-            <span className="contact-marquee-divider">✦</span>
-          </div>
-          <div className="contact-marquee-group" aria-hidden="true">
-            {contactItems.map((item) => (
-              <a className="contact-marquee-item" href={item.href} key={`copy-${item.label}`} tabIndex={-1}>
-                {item.icon}<span className="font-semibold uppercase tracking-[0.12em]">{item.label}</span><span>{item.value}</span>
-              </a>
-            ))}
-            <span className="contact-marquee-divider">✦</span>
-          </div>
+          {Array.from({ length: 16 }, (_, copy) => (
+            <div className="contact-marquee-group" key={copy} aria-hidden={copy > 0 || undefined}>
+              {contactItems.map((item) => (
+                <a
+                  className="contact-marquee-item"
+                  href={item.href}
+                  key={item.label}
+                  tabIndex={copy > 0 ? -1 : undefined}
+                >
+                  {item.icon}
+                  <span className="font-semibold uppercase tracking-[0.12em]">{item.label}</span>
+                  <span>{item.value}</span>
+                </a>
+              ))}
+              <span className="contact-marquee-divider">✦</span>
+            </div>
+          ))}
         </div>
       </div>
     </header>

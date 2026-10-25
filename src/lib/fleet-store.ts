@@ -21,6 +21,17 @@ const STORAGE_KEY_BUSINESS = "jv_rentals_business_data";
 export const EVENT_FLEET_CHANGED = "jv-fleet-changed";
 export const EVENT_BUSINESS_CHANGED = "jv-business-changed";
 
+function normalizeBusiness(business: Partial<BusinessInfo>): BusinessInfo {
+  return {
+    ...defaultBusiness,
+    ...business,
+    // Logo paths are application assets, not owner-editable business fields.
+    // Always use the stable public URLs so old Vite-hashed paths cannot break images.
+    logo: defaultBusiness.logo,
+    logoWhite: defaultBusiness.logoWhite,
+  };
+}
+
 // In-memory cache
 let inMemoryFleet: Vehicle[] | null = null;
 let inMemoryBusiness: BusinessInfo | null = null;
@@ -78,7 +89,7 @@ export function getStoredBusiness(): BusinessInfo {
       if (raw) {
         const parsed = JSON.parse(raw);
         if (parsed && typeof parsed === "object") {
-          inMemoryBusiness = { ...defaultBusiness, ...parsed };
+          inMemoryBusiness = normalizeBusiness(parsed);
           return inMemoryBusiness;
         }
       }
@@ -106,9 +117,9 @@ function persistFleet(fleet: Vehicle[]) {
  * Writes business info to localStorage and memory.
  */
 function persistBusiness(biz: BusinessInfo) {
-  inMemoryBusiness = { ...biz };
+  inMemoryBusiness = normalizeBusiness(biz);
   if (typeof window !== "undefined") {
-    localStorage.setItem(STORAGE_KEY_BUSINESS, JSON.stringify(biz));
+    localStorage.setItem(STORAGE_KEY_BUSINESS, JSON.stringify(inMemoryBusiness));
     notifyBusinessChange();
   }
 }

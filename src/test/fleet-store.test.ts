@@ -81,7 +81,6 @@ describe("Fleet Store — Vehicle Management", () => {
       extraKmPrice: 12,
       selfDrive: true,
       withDriver: true,
-      driverFeePerDay: 1000,
       available: true,
       description: "Premium MPV for highway travel",
       image: "https://example.com/innova.jpg",
@@ -162,9 +161,7 @@ describe("Fleet Store — Business & Contact Info", () => {
         hoursPerDay: 24,
         includedKmPerDay: 400,
         minSelfDriveAge: 21,
-        driverFeePerDay: 1200,
         documents: "Aadhar & DL required.",
-        driverTerms: "Driver terms apply.",
         delivery: "Doorstep delivery available.",
       },
     });
@@ -173,7 +170,6 @@ describe("Fleet Store — Business & Contact Info", () => {
     // Rules updated
     expect(biz.rules.includedKmPerDay).toBe(400);
     expect(biz.rules.minSelfDriveAge).toBe(21);
-    expect(biz.rules.driverFeePerDay).toBe(1200);
     // Original contact fields untouched
     expect(biz.whatsapp).toBeDefined();
     expect(biz.name).toBeDefined();
@@ -210,7 +206,6 @@ describe("Fleet Store — Backup & Restore", () => {
       extraKmPrice: 10,
       selfDrive: true,
       withDriver: false,
-      driverFeePerDay: 0,
       available: true,
       description: "Temp vehicle",
       image: "",

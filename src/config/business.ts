@@ -4,8 +4,10 @@
  */
 import ertigaImg from "@/assets/ertiga.jpg";
 import cretaImg from "@/assets/creta.jpg";
-import logoImg from "@/assets/logo.png";
-import logoWhiteImg from "@/assets/logo-white.png";
+
+// Use public assets so the logo URL stays stable across local SSR and browser hydration.
+const logoImg = "/logo.png";
+const logoWhiteImg = "/logo-white.png";
 
 export type RentalType = "self" | "driver";
 
@@ -19,7 +21,6 @@ export interface Vehicle {
   extraKmPrice: number;
   selfDrive: boolean;
   withDriver: boolean;
-  driverFeePerDay: number;
   available: boolean;
   description: string;
   image: string;
@@ -53,9 +54,7 @@ export const business = {
     hoursPerDay: 24,
     includedKmPerDay: 300,
     minSelfDriveAge: 20,
-    driverFeePerDay: 1000,
     documents: "Required documents and security requirements apply and will be shared on WhatsApp.",
-    driverTerms: "Other driver terms are confirmed during booking.",
     delivery:
       "Delivery / pickup to another location may be available for an additional distance-based charge.",
   },
@@ -72,7 +71,6 @@ export const vehicles: Vehicle[] = [
     extraKmPrice: 10,
     selfDrive: true,
     withDriver: true,
-    driverFeePerDay: 1000,
     available: true,
     description: "Seven seats for family trips, temple visits and group travel.",
     image: ertigaImg,
@@ -89,7 +87,6 @@ export const vehicles: Vehicle[] = [
     extraKmPrice: 7,
     selfDrive: true,
     withDriver: true,
-    driverFeePerDay: 1000,
     available: true,
     description: "A comfortable five-seat SUV for city drives and highway trips.",
     image: cretaImg,
@@ -190,7 +187,7 @@ export const faqs = (): FaqItem[] => {
     },
     {
       q: "Can I rent a car with a driver?",
-      a: `Yes. A driver can be arranged for ₹${r.driverFeePerDay.toLocaleString("en-IN")}/day.`,
+      a: "With-driver service availability depends on the vehicle. Contact us to confirm availability and charges.",
     },
     {
       q: "How do I book?",
