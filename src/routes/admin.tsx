@@ -942,12 +942,13 @@ function CarEditorModal({
   const [name, setName] = useState(car?.name || "");
   const [slug, setSlug] = useState(car?.slug || "");
   const [seats, setSeats] = useState(car?.seats ?? 7);
-  const [dailyPrice, setDailyPrice] = useState(car?.dailyPrice ?? 2999);
+  // Keep currency inputs as strings while editing so an empty field stays empty.
+  const [dailyPrice, setDailyPrice] = useState(String(car?.dailyPrice ?? 2999));
   const [includedKmPerDay, setIncludedKmPerDay] = useState(car?.includedKmPerDay ?? 300);
-  const [extraKmPrice, setExtraKmPrice] = useState(car?.extraKmPrice ?? 10);
+  const [extraKmPrice, setExtraKmPrice] = useState(String(car?.extraKmPrice ?? 10));
   const [selfDrive, setSelfDrive] = useState(car?.selfDrive ?? true);
   const [withDriver, setWithDriver] = useState(car?.withDriver ?? true);
-  const [driverFeePerDay, setDriverFeePerDay] = useState(car?.driverFeePerDay ?? 1000);
+  const [driverFeePerDay, setDriverFeePerDay] = useState(String(car?.driverFeePerDay ?? 1000));
   const [available, setAvailable] = useState(car?.available ?? true);
   const [description, setDescription] = useState(car?.description || "");
   const [image, setImage] = useState(car?.image || ertigaImg);
@@ -1000,6 +1001,10 @@ function CarEditorModal({
       toast.error("Please enter a URL slug");
       return;
     }
+    if (![dailyPrice, extraKmPrice, driverFeePerDay].every((value) => /^\d+$/.test(value))) {
+      toast.error("Enter a whole number for each price.");
+      return;
+    }
 
     setSaving(true);
     const vehicleData: Vehicle = {
@@ -1007,12 +1012,12 @@ function CarEditorModal({
       name: name.trim(),
       slug: slug.trim(),
       seats: Number(seats) || 5,
-      dailyPrice: Number(dailyPrice) || 0,
+      dailyPrice: Number(dailyPrice),
       includedKmPerDay: Number(includedKmPerDay) || 300,
-      extraKmPrice: Number(extraKmPrice) || 10,
+      extraKmPrice: Number(extraKmPrice),
       selfDrive: Boolean(selfDrive),
       withDriver: Boolean(withDriver),
-      driverFeePerDay: Number(driverFeePerDay) || 1000,
+      driverFeePerDay: Number(driverFeePerDay),
       available: Boolean(available),
       description: description.trim(),
       image: image.startsWith("data:") ? "" : image || ertigaImg,
@@ -1118,11 +1123,11 @@ function CarEditorModal({
                     ₹
                   </span>
                   <input
-                    type="number"
-                    min={100}
-                    step={50}
+                    type="text"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
                     value={dailyPrice}
-                    onChange={(e) => setDailyPrice(Number(e.target.value))}
+                    onChange={(e) => setDailyPrice(e.target.value.replace(/\D/g, ""))}
                     className="field !pl-8 text-sm"
                     required
                   />
@@ -1154,11 +1159,11 @@ function CarEditorModal({
                     ₹
                   </span>
                   <input
-                    type="number"
-                    min={1}
-                    step={1}
+                    type="text"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
                     value={extraKmPrice}
-                    onChange={(e) => setExtraKmPrice(Number(e.target.value))}
+                    onChange={(e) => setExtraKmPrice(e.target.value.replace(/\D/g, ""))}
                     className="field !pl-8 text-sm"
                     required
                   />
@@ -1221,11 +1226,11 @@ function CarEditorModal({
                     ₹
                   </span>
                   <input
-                    type="number"
-                    min={0}
-                    step={100}
+                    type="text"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
                     value={driverFeePerDay}
-                    onChange={(e) => setDriverFeePerDay(Number(e.target.value))}
+                    onChange={(e) => setDriverFeePerDay(e.target.value.replace(/\D/g, ""))}
                     className="field !pl-8 text-sm"
                   />
                 </div>
@@ -1364,6 +1369,7 @@ function BusinessContactForm({
 }) {
   const [name, setName] = useState(initialBusiness.name);
   const [tagline, setTagline] = useState(initialBusiness.tagline);
+  const [phone, setPhone] = useState(initialBusiness.phone);
   const [whatsapp, setWhatsapp] = useState(initialBusiness.whatsapp);
   const [location, setLocation] = useState(initialBusiness.location);
   const [fullAddress, setFullAddress] = useState(initialBusiness.fullAddress || "");
@@ -1391,6 +1397,7 @@ function BusinessContactForm({
     const result = await onSave({
       name: name.trim(),
       tagline: tagline.trim(),
+      phone: phone.trim(),
       whatsapp: whatsapp.trim(),
       location: location.trim(),
       fullAddress: fullAddress.trim(),
@@ -1441,23 +1448,42 @@ function BusinessContactForm({
           />
         </div>
 
+        {/* Primary call number */}
+        <div>
+          <label className="block text-xs font-semibold uppercase tracking-wider text-primary">
+            Call Phone Number *
+          </label>
+          <input
+            type="tel"
+            inputMode="tel"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            placeholder="e.g. +91 97888 12015"
+            className="field mt-1 text-sm font-semibold"
+            required
+          />
+          <p className="mt-1 text-[11px] text-muted-foreground">
+            Shown as the call number in the moving contact strip.
+          </p>
+        </div>
+
         {/* WhatsApp & Booking Phone */}
         <div>
           <label className="block text-xs font-semibold uppercase tracking-wider text-primary">
-            Primary WhatsApp & Phone Number *
+            WhatsApp Number *
           </label>
           <div className="relative mt-1">
             <input
               type="text"
               value={whatsapp}
               onChange={(e) => setWhatsapp(e.target.value)}
-              placeholder="e.g. +91 75399 02681"
+              placeholder="e.g. +91 80727 23844"
               className="field text-sm font-semibold"
               required
             />
           </div>
           <p className="mt-1 text-[11px] text-muted-foreground">
-            Include country code (e.g. +91). This updates all "WhatsApp Us" and booking buttons instantly.
+            This updates all WhatsApp and booking buttons, and the WhatsApp number in the moving strip.
           </p>
         </div>
 
@@ -1592,7 +1618,7 @@ function RentalRulesForm({
   const [hoursPerDay, setHoursPerDay] = useState(currentRules.hoursPerDay ?? 24);
   const [includedKmPerDay, setIncludedKmPerDay] = useState(currentRules.includedKmPerDay ?? 300);
   const [minSelfDriveAge, setMinSelfDriveAge] = useState(currentRules.minSelfDriveAge ?? 20);
-  const [driverFeePerDay, setDriverFeePerDay] = useState(currentRules.driverFeePerDay ?? 1000);
+  const [driverFeePerDay, setDriverFeePerDay] = useState(String(currentRules.driverFeePerDay ?? 1000));
   const [documents, setDocuments] = useState(
     currentRules.documents || "Required documents and security requirements apply and will be shared on WhatsApp.",
   );
@@ -1605,6 +1631,10 @@ function RentalRulesForm({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!/^\d+$/.test(driverFeePerDay)) {
+      toast.error("Enter a whole number for the driver fee.");
+      return;
+    }
     setIsSaving(true);
     const result = await onSave({
       rules: {
@@ -1687,11 +1717,11 @@ function RentalRulesForm({
         <div>
           <label className="block text-xs font-medium">Standard Driver Fee (₹/day)</label>
           <input
-            type="number"
-            min={0}
-            step={100}
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
             value={driverFeePerDay}
-            onChange={(e) => setDriverFeePerDay(Number(e.target.value))}
+            onChange={(e) => setDriverFeePerDay(e.target.value.replace(/\D/g, ""))}
             className="field mt-1 text-sm"
             required
           />

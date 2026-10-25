@@ -1,6 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Check, MapPin, Minus, Shield } from "lucide-react";
+import { Check, MapPin, Minus } from "lucide-react";
 import heroImg from "@/assets/hero.jpg";
 import weddingImg from "@/assets/wedding.jpg";
 import birthdayImg from "@/assets/birthday.jpg";
@@ -530,15 +530,6 @@ function Index() {
                   </a>
                 </li>
               ))}
-              <li>
-                <Link
-                  to="/admin"
-                  className="inline-flex items-center gap-1.5 text-primary hover:text-ink-foreground font-medium pt-1"
-                >
-                  <Shield className="size-3.5" />
-                  Admin Dashboard
-                </Link>
-              </li>
             </ul>
           </div>
           <div>

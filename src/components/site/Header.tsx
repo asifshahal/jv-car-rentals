@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "@tanstack/react-router";
-import { Menu, Shield, X } from "lucide-react";
+import { Menu, MessageCircle, Phone, X } from "lucide-react";
 import { useBusiness } from "@/hooks/useFleetData";
 import { waLink } from "@/lib/booking";
 
@@ -60,6 +59,11 @@ export function Header() {
     business.whatsapp,
     `Hello ${business.name}, I'd like to enquire about a car rental.`,
   );
+  const telephone = business.phone.replace(/[^+\d]/g, "");
+  const contactItems = [
+    { label: "Call us", value: business.phone, href: `tel:${telephone}`, icon: <Phone className="size-3.5" /> },
+    { label: "WhatsApp", value: business.whatsapp, href: wa, icon: <MessageCircle className="size-3.5" /> },
+  ];
 
   return (
     <header
@@ -82,14 +86,6 @@ export function Header() {
           </ul>
         </nav>
         <div className="flex items-center gap-2.5">
-          <Link
-            to="/admin"
-            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground border rounded transition-colors hover:border-foreground/40"
-            title="Admin Dashboard"
-          >
-            <Shield className="size-3.5 text-primary" />
-            <span>Admin</span>
-          </Link>
           <a
             href={wa}
             target="_blank"
@@ -122,19 +118,29 @@ export function Header() {
                 </a>
               </li>
             ))}
-            <li className="pt-2">
-              <Link
-                to="/admin"
-                onClick={() => setOpen(false)}
-                className="flex items-center gap-2 py-3 text-base text-primary font-medium"
-              >
-                <Shield className="size-4" />
-                Admin Panel (Fleet & Store)
-              </Link>
-            </li>
           </ul>
         </nav>
       )}
+      <div className="contact-marquee border-t border-border/70" role="region" aria-label={`Call ${business.phone} or WhatsApp ${business.whatsapp}`}>
+        <div className="contact-marquee-track">
+          <div className="contact-marquee-group">
+            {contactItems.map((item) => (
+              <a className="contact-marquee-item" href={item.href} key={item.label}>
+                {item.icon}<span className="font-semibold uppercase tracking-[0.12em]">{item.label}</span><span>{item.value}</span>
+              </a>
+            ))}
+            <span className="contact-marquee-divider">✦</span>
+          </div>
+          <div className="contact-marquee-group" aria-hidden="true">
+            {contactItems.map((item) => (
+              <a className="contact-marquee-item" href={item.href} key={`copy-${item.label}`} tabIndex={-1}>
+                {item.icon}<span className="font-semibold uppercase tracking-[0.12em]">{item.label}</span><span>{item.value}</span>
+              </a>
+            ))}
+            <span className="contact-marquee-divider">✦</span>
+          </div>
+        </div>
+      </div>
     </header>
   );
 }

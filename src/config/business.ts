@@ -37,7 +37,8 @@ export const business = {
   tagline: "Drive More Possibilities",
   logo: logoImg,
   logoWhite: logoWhiteImg,
-  whatsapp: "+91 75399 02681",
+  phone: "+91 97888 12015",
+  whatsapp: "+91 80727 23844",
   location: "Trichy, Tamil Nadu",
   fullAddress: "", // TODO admin: exact pickup address not finalised
   mapsUrl: "", // TODO admin: Google Maps link
