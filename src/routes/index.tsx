@@ -12,7 +12,7 @@ import { inr, waLink } from "@/lib/booking";
 
 const TITLE = "Car Rental in Trichy — Self Drive & With Driver | JV Car Rentals";
 const DESC =
-  "Rent a Suzuki Ertiga (7 seater) or Hyundai Creta (5 seater) in Trichy. Self drive or with driver, 300 km/day included. Enquire and book on WhatsApp.";
+  "Looking for car rental in Trichy? Choose from hatchbacks, sedans, SUVs and 7-seater family cars, with self-drive or driver options. Enquire on WhatsApp.";
 
 export const Route = createFileRoute("/")({
   head: () => ({

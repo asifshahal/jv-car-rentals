@@ -82,12 +82,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "JV Car Rentals — Car Rental in Trichy" },
       {
         name: "description",
-        content: "Self drive and with-driver car rentals in Trichy, Tamil Nadu.",
+        content: "Car rental in Trichy with hatchbacks, sedans, SUVs and 7-seater family cars. Choose self-drive or with-driver rentals and enquire on WhatsApp.",
       },
       { property: "og:title", content: "JV Car Rentals — Car Rental in Trichy" },
       {
         property: "og:description",
-        content: "Self drive and with-driver car rentals in Trichy, Tamil Nadu.",
+        content: "Car rental in Trichy with hatchbacks, sedans, SUVs and 7-seater family cars. Choose self-drive or with-driver rentals and enquire on WhatsApp.",
       },
       { property: "og:type", content: "website" },
       { property: "og:image", content: "https://jvcarrental.in/seo-logo.png" },
