@@ -15,7 +15,7 @@ const nav = [
 export function Logo({
   className = "",
   variant = "default",
-  imgClassName = "h-16 md:h-20 w-auto object-contain",
+  imgClassName = "h-14 w-auto object-contain",
 }: {
   className?: string;
   variant?: "default" | "light";
@@ -69,7 +69,7 @@ export function Header() {
     <header
       className={`sticky top-0 z-40 border-b bg-background/95 backdrop-blur transition-colors ${scrolled ? "border-border" : "border-transparent"}`}
     >
-      <div className="container-page flex h-24 items-center justify-between gap-4">
+      <div className="container-page flex h-16 items-center justify-between gap-4">
         <Logo />
         <nav aria-label="Main" className="hidden lg:block">
           <ul className="flex items-center gap-7 text-sm">
